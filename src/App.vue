@@ -81,63 +81,70 @@
       :height="chartHeight"
       :show-values="true"
       :label-height="20"
+      text-color="grey"
     >
-      <template v-slot:label="barProps">
+      <template v-slot:label="opt">
         <text
-          v-if="barProps.bar.index === 1"
-          :x="barProps.bar.midPoint"
-          :y="`${barProps.bar.yLabel + 10}px`"
+          v-if="opt.bar.index === 1"
+          :x="opt.bar.midPoint"
+          :y="`${opt.bar.yLabel + 10}px`"
           text-anchor="middle"
+          :style="opt.textStyle"
         >
           Here
         </text>
         <text
-          v-else-if="barProps.bar.index === 2"
-          :x="barProps.bar.midPoint"
-          :y="`${barProps.bar.yLabel + 10}px`"
+          v-else-if="opt.bar.index === 2"
+          :x="opt.bar.midPoint"
+          :y="`${opt.bar.yLabel + 10}px`"
           text-anchor="middle"
+          :style="opt.textStyle"
         >
           are
         </text>
         <text
-          v-else-if="barProps.bar.index === 3"
-          :x="barProps.bar.midPoint"
-          :y="`${barProps.bar.yLabel + 10}px`"
+          v-else-if="opt.bar.index === 3"
+          :x="opt.bar.midPoint"
+          :y="`${opt.bar.yLabel + 10}px`"
           text-anchor="middle"
+          :style="opt.textStyle"
         >
           custom
         </text>
         <text
-          v-else-if="barProps.bar.index === 4"
-          :x="barProps.bar.midPoint"
-          :y="`${barProps.bar.yLabel + 10}px`"
+          v-else-if="opt.bar.index === 4"
+          :x="opt.bar.midPoint"
+          :y="`${opt.bar.yLabel + 10}px`"
           text-anchor="middle"
+          :style="opt.textStyle"
         >
           labels
         </text>
         <image
-          v-else-if="barProps.bar.index === 5"
-          :x="`${barProps.bar.midPoint - 10}px`"
-          :y="`${barProps.bar.yLabel}px`"
+          v-else-if="opt.bar.index === 5"
+          :x="`${opt.bar.midPoint - 10}px`"
+          :y="`${opt.bar.yLabel}px`"
           height="20"
           width="20"
           href="https://raw.githubusercontent.com/vuejs/art/master/logo.png"
         />
         <text
-          v-else-if="barProps.bar.index === 6"
-          :x="barProps.bar.midPoint"
-          :y="`${barProps.bar.yLabel + 10}px`"
+          v-else-if="opt.bar.index === 6"
+          :x="opt.bar.midPoint"
+          :y="`${opt.bar.yLabel + 10}px`"
           text-anchor="middle"
+          :style="opt.textStyle"
         >
           &#128526;
         </text>
         <text
           v-else
-          :x="barProps.bar.midPoint"
-          :y="`${barProps.bar.yLabel + 10}px`"
+          :x="opt.bar.midPoint"
+          :y="`${opt.bar.yLabel + 10}px`"
           text-anchor="middle"
+          :style="opt.textStyle"
         >
-          {{ barProps.bar.label }}
+          {{ opt.bar.label }}
         </text>
       </template>
       <template v-slot:title="props">
@@ -165,6 +172,7 @@ export default {
       monthLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
       dataPoints: [41.1, 1, 15, 16, 23, 41.1, 4, 8, 15, 22, 1, 12],
       dataPointObjects: [{ label: 'N', value: 41.1 }, { label: 'NW', value: 1 }, { label: 'W', value: 15 }, { label: 'SW', value: 16 }, { label: 'S', value: 23 }, { label: 'SE', value: 41.1 }, { label: 'E', value: 4 }, { label: 'NE', value: 8 }],
+      dataObj2: [{ label: 'Arsalan Savand', value: 119 }, { label: 'Amir Savand', value: 97 }, { label: 'Arsalan Savand', value: 17 }, { label: 'Alireza Savand', value: 9 }, { label: 'MOJO', value: 9 }, { label: 'User 1 Some Long Name XXX', value: 2 }],
       chartWidth: 450,
       chartHeight: 200,
     };

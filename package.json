@@ -1,6 +1,6 @@
 {
   "name": "vue-bar-graph",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Simple and lightweight Vue chart svg component without chart library dependencies",
   "author": {
     "name": "Lauris BH",
@@ -37,8 +37,6 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.1.2",
-    "node-sass": "^4.13.0",
-    "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -53,11 +51,6 @@
     "rules": {},
     "parserOptions": {
       "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
     }
   },
   "browserslist": [

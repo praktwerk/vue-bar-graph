@@ -1,6 +1,5 @@
 <template>
   <svg
-    class="vue-bar-graph"
     :width="fullSvgWidth"
     :height="fullSvgHeight"
     aria-labelledby="title"
@@ -42,16 +41,19 @@
             :y="bar.yOffset"
             :dy="`${bar.height < 22 ? '-5px' : '15px'}`"
             text-anchor="middle"
+            :style="{ fill: (bar.height < 22 ? textColor : textAltColor), font: textFont }"
           >{{ bar.staticValue }}</text>
           <g v-if="showXAxis">
             <slot
               name="label"
               :bar="bar"
+              :text-style="{ fill: textColor, font: textFont }"
             >
               <text
                 :x="bar.midPoint"
                 :y="`${bar.yLabel + 10}px`"
                 text-anchor="middle"
+                :style="{ fill: textColor, font: textFont }"
               >
                 {{ bar.label }}
               </text>
@@ -109,11 +111,10 @@
             stroke-width="1"
           />
           <text
-            class="text-black"
             x="0"
-            :y="tick.y1"
+            :y="tick.yText"
             alignment-baseline="central"
-            fill="black"
+            :style="{ fill: textColor, font: textFont }"
           >{{ tick.text }}</text>
         </g>
       </g>
@@ -141,6 +142,9 @@ export default {
     maxYAxis: { type: Number, default: 0 },
     animationDuration: { type: Number, default: 0.5 },
     barColor: { type: String, default: 'deepskyblue' },
+    textColor: { type: String, default: 'black' },
+    textAltColor: { type: String, default: 'black' },
+    textFont: { type: String, default: '10px sans-serif' },
     useCustomLabels: { type: Boolean, default: false },
     customLabels: { type: Array, default: () => [] },
   },
@@ -306,6 +310,7 @@ export default {
             return {
               key,
               text: shouldForceDecimals ? tickValue.toFixed(1) : tickValue,
+              yText: (yCoord < 10 ? 10 : yCoord + 4),
               x1: this.yAxisWidth - 4,
               y1: yCoord,
               x2: this.yAxisWidth - 1,
@@ -342,9 +347,3 @@ export default {
   },
 };
 </script>
-
-<style scoped lang="scss">
-  .vue-bar-graph text {
-    font: 10px sans-serif
-  }
-</style>
