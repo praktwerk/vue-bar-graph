@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="pure-vue-bar-chart"
+    class="vue-bar-graph"
     :width="fullSvgWidth"
     :height="fullSvgHeight"
     aria-labelledby="title"
@@ -21,12 +21,20 @@
           :key="bar.index"
           :transform="`translate(${bar.x},0)`"
         >
-          <title>{{ bar.staticValue }}</title>
+          <title>
+            <slot
+              name="title"
+              :bar="bar"
+            >
+              <tspan>{{ bar.staticValue }}</tspan>
+            </slot>
+          </title>
           <rect
             :width="bar.width"
             :height="bar.height"
             :x="2"
             :y="bar.yOffset"
+            :style="{ fill: barColor }"
           />
           <text
             v-if="showValues"
@@ -36,13 +44,18 @@
             text-anchor="middle"
           >{{ bar.staticValue }}</text>
           <g v-if="showXAxis">
-            <text
-              :x="bar.midPoint"
-              :y="`${innerChartHeight + 14}px`"
-              text-anchor="middle"
+            <slot
+              name="label"
+              :bar="bar"
             >
-              <slot name='label' :bar="bar">{{ dataLabels[bar.index] }}</slot>
-            </text>
+              <text
+                :x="bar.midPoint"
+                :y="`${bar.yLabel + 10}px`"
+                text-anchor="middle"
+              >
+                {{ bar.label }}
+              </text>
+            </slot>
             <line
               :x1="bar.midPoint"
               :x2="bar.midPoint"
@@ -83,7 +96,10 @@
           stroke="#555555"
           stroke-width="1"
         />
-        <g v-for="tick in getTicks()">
+        <g
+          v-for="tick in getTicks()"
+          :key="tick.key"
+        >
           <line
             :x1="tick.x1"
             :y1="tick.y1"
@@ -106,7 +122,7 @@
 </template>
 
 <script>
-import { TweenLite } from 'gsap/TweenLite';
+import { TweenLite } from 'gsap';
 
 export default {
   props: {
@@ -116,17 +132,20 @@ export default {
     width: { type: Number, default: 300 },
     showYAxis: { type: Boolean, default: false },
     showXAxis: { type: Boolean, default: false },
+    labelHeight: { type: Number, default: 12 },
     showTrendLine: { type: Boolean, default: false },
     trendLineColor: { type: String, default: 'green' },
     trendLineWidth: { type: Number, default: 2 },
     easeIn: { type: Boolean, default: true },
     showValues: { type: Boolean, default: false },
     maxYAxis: { type: Number, default: 0 },
-    useMonthLabels: { type: Boolean, default: false },
+    animationDuration: { type: Number, default: 0.5 },
+    barColor: { type: String, default: 'deepskyblue' },
+    useCustomLabels: { type: Boolean, default: false },
+    customLabels: { type: Array, default: () => [] },
   },
   data() {
     return {
-      months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
       dynamicPoints: [],
       staticPoints: [],
       extraTopHeightForYAxisLabel: 4,
@@ -136,17 +155,17 @@ export default {
   },
   computed: {
     usingObjectsForDataPoints() {
-      return this.points.every(x => typeof x === 'object');
+      return this.points.every((x) => typeof x === 'object');
     },
     dataPoints() {
       return this.usingObjectsForDataPoints
-        ? this.points.map(item => item.value)
+        ? this.points.map((item) => item.value)
         : this.points;
     },
     dataLabels() {
       return this.points.map((point, i) => {
-        if (this.useMonthLabels) {
-          return this.months[i];
+        if (this.useCustomLabels) {
+          return this.customLabels[i];
         }
         return this.usingObjectsForDataPoints
           ? point.label
@@ -167,8 +186,8 @@ export default {
     },
     xAxisHeight() {
       return this.showYAxis
-        ? 12
-        : 12 + this.extraBottomHeightForYAxisLabel + this.extraTopHeightForYAxisLabel;
+        ? this.labelHeight
+        : this.labelHeight + this.extraBottomHeightForYAxisLabel + this.extraTopHeightForYAxisLabel;
     },
     fullSvgWidth() {
       return this.width;
@@ -202,8 +221,10 @@ export default {
       return this.dynamicPoints.map((dynamicValue, index) => ({
         staticValue: this.staticPoints[index],
         index,
+        label: this.dataLabels[index],
         width: this.partitionWidth - 2,
         midPoint: this.partitionWidth / 2,
+        yLabel: this.innerChartHeight + 4,
         x: index * this.partitionWidth,
         xMidpoint: index * this.partitionWidth + this.partitionWidth / 2,
         yOffset: this.innerChartHeight - this.y(dynamicValue),
@@ -221,7 +242,7 @@ export default {
     },
   },
   watch: {
-    points(updatedPoints) {
+    dataPoints(updatedPoints) {
       this.tween(updatedPoints);
     },
   },
@@ -244,7 +265,7 @@ export default {
         negative = true;
         number *= -1;
       }
-      const multiplicator = Math.pow(10, digits);
+      const multiplicator = 10 ** digits;
       number = parseFloat((number * multiplicator).toFixed(11));
       number = (Math.round(number) / multiplicator).toFixed(2);
       if (negative) {
@@ -265,7 +286,9 @@ export default {
         obj.pop();
         this.dynamicPoints = obj;
       };
-      TweenLite.to(initialData, 0.5, { ...desiredData, onUpdate: convertBackToArray });
+      TweenLite.to(initialData,
+        this.animationDuration,
+        { ...desiredData, onUpdate: convertBackToArray });
       this.staticPoints = desiredDataArray;
     },
     getTicks() {
@@ -278,9 +301,10 @@ export default {
             .replace('.', '')
             .length;
           return [...new Array(numberOfTicks + 1)].map((item, key) => {
-            const tickValue = this.maxDomain / numberOfTicks * (numberOfTicks - key);
-            const yCoord = this.innerChartHeight / numberOfTicks * key;
+            const tickValue = (this.maxDomain / numberOfTicks) * (numberOfTicks - key);
+            const yCoord = (this.innerChartHeight / numberOfTicks) * key;
             return {
+              key,
               text: shouldForceDecimals ? tickValue.toFixed(1) : tickValue,
               x1: this.yAxisWidth - 4,
               y1: yCoord,
@@ -290,11 +314,12 @@ export default {
           });
         }
       }
+      return [];
     },
     applySlope(values) {
       let xAvg = 0;
       let yAvg = 0;
-      for (let x = 0; x < values.length; x++) {
+      for (let x = 0; x < values.length; x += 1) {
         xAvg += x;
         yAvg += values[x];
       }
@@ -302,14 +327,14 @@ export default {
       yAvg /= values.length;
       let v1 = 0; let
         v2 = 0;
-      for (let x = 0; x < values.length; x++) {
+      for (let x = 0; x < values.length; x += 1) {
         v1 += (x - xAvg) * (values[x] - yAvg);
-        v2 += Math.pow(x - xAvg, 2);
+        v2 += (x - xAvg) ** 2;
       }
       const a = v1 / v2;
       const b = yAvg - a * xAvg;
       const result = [];
-      for (let index = 0; index < values.length; index++) {
+      for (let index = 0; index < values.length; index += 1) {
         result.push(a * index + b);
       }
       return result;
@@ -319,10 +344,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .pure-vue-bar-chart rect {
-    fill: deepskyblue
-  }
-  .pure-vue-bar-chart text {
+  .vue-bar-graph text {
     font: 10px sans-serif
   }
 </style>

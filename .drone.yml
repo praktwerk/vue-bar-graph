@@ -1,0 +1,34 @@
+---
+kind: pipeline
+name: default
+
+trigger:
+  ref:
+    - refs/heads/master
+    - "refs/tags/**"
+    - "refs/pull/**"
+
+steps:
+  - name: install dependencies
+    image: node:13-alpine
+    commands:
+      - npm install
+
+  - name: lint
+    image: node:13-alpine
+    commands:
+      - npm run lint
+
+  - name: build
+    image: node:13-alpine
+    commands:
+      - npm run build
+
+  - name: publish
+    image: plugins/npm
+    settings:
+      token:
+        from_secret: npm_token
+    when:
+      event:
+        - tag

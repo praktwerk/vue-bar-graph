@@ -1,11 +1,11 @@
 // Import vue component
-import PureVueChart from './components/PureVueChart.vue';
+import VueBarGraph from './components/VueBarGraph.vue';
 
 // Declare install function executed by Vue.use()
 export function install(Vue) {
   if (install.installed) return;
   install.installed = true;
-  Vue.component('pure-vue-chart', PureVueChart);
+  Vue.component('vue-bar-graph', VueBarGraph);
 }
 
 // Create module definition for Vue.use()
@@ -25,4 +25,4 @@ if (GlobalVue) {
 }
 
 // To allow use as module (npm/webpack/etc.) export component
-export default PureVueChart;
+export default VueBarGraph;

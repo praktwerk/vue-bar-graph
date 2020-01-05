@@ -1,15 +1,20 @@
 <p align="center">
-  <h1>Pure Vue Chart</h1>
+  <h1>Vue Bar Graph</h1>
 </p>
 <p align="center">
     A simple and lightweight vue component for making charts that do not rely on large chart libraries and will not bloat your dependencies
 </p>
+
+*Forked from https://github.com/djaxho/pure-vue-chart*
+
+[![Build Status](https://cloud.drone.io/api/badges/lafriks/vue-bar-graph/status.svg)](https://cloud.drone.io/lafriks/vue-bar-graph)
+
 <hr/>
 
 <h3>Example</h3>
 
 ```
-<pure-vue-chart
+<vue-bar-graph
   :points="[3,5,2,5,4]"
   :width="400"
   :height="200"
@@ -22,21 +27,21 @@
 
 ## Install
 ```
-npm i pure-vue-chart
+npm i vue-bar-graph
 ```
 Import it:
 ```
-import PureVueChart from 'pure-vue-chart';
+import VueBarGraph from 'vue-bar-graph';
 ```
 Register it in your component:
 ```
 components: {
-    PureVueChart,
+    VueBarGraph,
 },
 ```
 ## Use it
 ```
-<pure-vue-chart
+<vue-bar-graph
   :points="[3,5,2,5,4]"
   :width="400"
   :height="200"
@@ -55,8 +60,8 @@ components: {
 :width="400"
 :height="200"
 :show-values="true"
-:use-month-labels="true"
-:months="['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']"
+:use-custom-labels="true"
+:labels="['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dec']"
 ```
 
 ### Additional Features:
@@ -71,7 +76,7 @@ trend-line-color="lightblue"
 
 #### X-axis labels:
 X-axis labels, by default will be from 1 - length-of-data.
-But you can automatically use Months by using the prop `:use-month-labels="true"`.
+But you can automatically use custom labels by using the prop `:use-custom-labels="true"`.
 Or you can provide the data as an array of objects, each with a `value` and `label` like so:
 ```
 :points=[{label: 'N', value: 41.1}, {label: 'NW', value: 1}, {label: 'W', value: 15}]
@@ -81,19 +86,18 @@ Or you can provide the data as an array of objects, each with a `value` and `lab
 I'm open to any issues or pull requests so long as
 they are simple, easy to read, use the eslint settings in package.json, 
 and follow commitizen-esque style commit formats. Just open an issue on github and start a discussion.
-- pure-vue-chart issues - https://github.com/djaxho/pure-vue-chart/issues
+- vue-bar-graph issues - https://github.com/lafriks/vue-bar-graph/issues
 
 <h3>Authors or Acknowledgments</h3>
+
 <ul>
   <li>Danny Jackson</li>
+  <li>Lauris BH</li>
 </ul>
 
 <h3> List of features </h3>
 <ul>
   <li>Simple bar charts</li>
-  <li>Line charts (planned)</li>
-  <li>Pie charts (planned)</li>
-  <li>Rose charts (planned)</li>
 </ul>
 
 <h3>License</h3>
