@@ -33,7 +33,7 @@
             :height="bar.height"
             :x="2"
             :y="bar.yOffset"
-            :style="{ fill: barColor }"
+            :style="{ fill: bar.barColor }"
           />
           <text
             v-if="showValues"
@@ -41,7 +41,7 @@
             :y="bar.yOffset"
             :dy="`${bar.height < 22 ? '-5px' : '15px'}`"
             text-anchor="middle"
-            :style="{ fill: (bar.height < 22 ? textColor : textAltColor), font: textFont }"
+            :style="{ fill: (bar.height < 22 ? bar.textColor : bar.textAltColor), font: textFont }"
           >{{ bar.staticValue }}</text>
           <g v-if="showXAxis">
             <slot
@@ -176,6 +176,13 @@ export default {
           : i + 1;
       });
     },
+    dataColors() {
+      return this.points.map((item) => ({
+        barColor: (item && item.barColor ? item.barColor : this.barColor),
+        textColor: (item && item.textColor ? item.textColor : this.textColor),
+        textAltColor: (item && item.textAltColor ? item.textAltColor : this.textAltColor),
+      }));
+    },
     yAxisWidth() {
       switch (this.digitsUsedInYAxis) {
         case 4:
@@ -233,6 +240,9 @@ export default {
         xMidpoint: index * this.partitionWidth + this.partitionWidth / 2,
         yOffset: this.innerChartHeight - this.y(dynamicValue),
         height: this.y(dynamicValue),
+        barColor: this.dataColors[index].barColor,
+        textColor: this.dataColors[index].textColor,
+        textAltColor: this.dataColors[index].textAltColor,
       }));
     },
     trendLine() {

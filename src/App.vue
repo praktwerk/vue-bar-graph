@@ -81,6 +81,7 @@
       :height="chartHeight"
       :show-values="true"
       :label-height="20"
+      text-alt-color="#ffffff"
       text-color="grey"
     >
       <template #label="opt">
@@ -171,7 +172,13 @@ export default {
     return {
       monthLabels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
       dataPoints: [41.1, 1, 15, 16, 23, 41.1, 4, 8, 15, 22, 1, 12],
-      dataPointObjects: [{ label: 'N', value: 41.1 }, { label: 'NW', value: 1 }, { label: 'W', value: 15 }, { label: 'SW', value: 16 }, { label: 'S', value: 23 }, { label: 'SE', value: 41.1 }, { label: 'E', value: 4 }, { label: 'NE', value: 8 }],
+      dataPointObjects: [{
+        label: 'N', value: 41.1, barColor: '#ffff00', textColor: '#00ffff', textAltColor: '#0000ff',
+      }, { label: 'NW', value: 1 }, { label: 'W', value: 15 }, { label: 'SW', value: 16 }, { label: 'S', value: 23 }, { label: 'SE', value: 41.1 },
+      {
+        label: 'E', value: 4, barColor: '#ff00ff', textColor: '#00ffff', textAltColor: '#0000ff',
+      },
+      { label: 'NE', value: 8 }],
       dataObj2: [{ label: 'Arsalan Savand', value: 119 }, { label: 'Amir Savand', value: 97 }, { label: 'Arsalan Savand', value: 17 }, { label: 'Alireza Savand', value: 9 }, { label: 'MOJO', value: 9 }, { label: 'User 1 Some Long Name XXX', value: 2 }],
       chartWidth: 450,
       chartHeight: 200,
