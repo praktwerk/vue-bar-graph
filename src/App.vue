@@ -83,7 +83,7 @@
       :label-height="20"
       text-color="grey"
     >
-      <template v-slot:label="opt">
+      <template #label="opt">
         <text
           v-if="opt.bar.index === 1"
           :x="opt.bar.midPoint"
@@ -147,7 +147,7 @@
           {{ opt.bar.label }}
         </text>
       </template>
-      <template v-slot:title="props">
+      <template #title="props">
         <tspan v-if="props.bar.index === 5">
           Very custom title text
         </tspan>

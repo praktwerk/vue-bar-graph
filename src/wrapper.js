@@ -5,7 +5,7 @@ import VueBarGraph from './components/VueBarGraph.vue';
 export function install(Vue) {
   if (install.installed) return;
   install.installed = true;
-  Vue.component('vue-bar-graph', VueBarGraph);
+  Vue.component('VueBarGraph', VueBarGraph);
 }
 
 // Create module definition for Vue.use()
