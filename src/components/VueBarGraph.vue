@@ -142,6 +142,7 @@ export default {
     maxYAxis: { type: Number, default: 0 },
     animationDuration: { type: Number, default: 0.5 },
     barColor: { type: String, default: 'deepskyblue' },
+    barSpacing: { type: Number, default: 2 },
     textColor: { type: String, default: 'black' },
     textAltColor: { type: String, default: 'black' },
     textFont: { type: String, default: '10px sans-serif' },
@@ -225,6 +226,13 @@ export default {
     partitionWidth() {
       return this.innerChartWidth / this.dataPoints.length;
     },
+    barWidth() {
+      const w = this.partitionWidth - this.barSpacing;
+      if (w <= 0) {
+        return 1;
+      }
+      return this.partitionWidth - this.barSpacing;
+    },
     maxDomain() {
       return this.maxYAxis ? this.maxYAxis : Math.ceil(Math.max(...this.dataPoints));
     },
@@ -233,7 +241,7 @@ export default {
         staticValue: this.staticPoints[index],
         index,
         label: this.dataLabels[index],
-        width: this.partitionWidth - 2,
+        width: this.barWidth,
         midPoint: this.partitionWidth / 2,
         yLabel: this.innerChartHeight + 4,
         x: index * this.partitionWidth,
