@@ -184,16 +184,7 @@ export default {
       }));
     },
     yAxisWidth() {
-      switch (this.digitsUsedInYAxis) {
-        case 4:
-          return 30;
-        case 3:
-          return 25;
-        case 2:
-          return 18;
-        default:
-          return 13;
-      }
+      return this.digitsUsedInYAxis * 5.8 + 5
     },
     xAxisHeight() {
       return this.showYAxis
@@ -310,10 +301,7 @@ export default {
         if (this.maxDomain % i === 0) {
           const shouldForceDecimals = i < 3;
           const numberOfTicks = shouldForceDecimals ? 3 : i;
-          this.digitsUsedInYAxis = this.maxDomain
-            .toFixed(shouldForceDecimals ? 1 : 0)
-            .replace('.', '')
-            .length;
+          this.digitsUsedInYAxis = this.maxDomain.toFixed(shouldForceDecimals ? 1 : 0).replace('.', '').length;
           return [...new Array(numberOfTicks + 1)].map((item, key) => {
             const tickValue = (this.maxDomain / numberOfTicks) * (numberOfTicks - key);
             const yCoord = (this.innerChartHeight / numberOfTicks) * key;
